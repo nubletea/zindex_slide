@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callback test</title>
+<style>
+    body{
+        margin:0;
+        padding:0;
+    }
+    .test_box{
+        width:1200px;
+        height:800px;
+        overflow: hidden;
+        position:relative;
+    }
+    .img_box{
+        width:1200px;
+        height:100%;
+        position: relative;
+    }
+    .img_box img{
+        max-width:100%;
+        width:1200px;
+        position: absolute;
+        transition: all 1s;
+        left:100%;
+    }
+    .img_box img.active{
+        z-index:1;
+        left:0;
+    }
+    .btn{
+        list-style:none;
+        display:flex;
+        margin:0;
+        padding:0;
+    }
+    .btn li{
+        margin-left:10px;
+        padding:.5rem;
+        cursor: pointer;
+    }
+    .btn li.active{
+        background:orange;
+        color:#fff;
+        font-weight: 600;
+        border-radius:10px;
+    }
+</style>
+</head>
+<body>
+    <div class="test_box">
+        <div class="img_box">
+            <img src="1-1.jpg" class="active" alt="1">
+            <img src="1-2.jpg" alt="1">
+            <img src="1-3.jpg" alt="1">
+        </div>
+    </div>
+    <ul class="btn">
+        <li class="active">1</li>
+        <li>2</li>
+        <li>3</li>
+    </ul>
+</body>
+<script>
+const IMG_BOX_IMG=document.querySelectorAll('.img_box img');
+const IMG_BOX=document.querySelector('.img_box');
+const BTN_LI=document.querySelectorAll('.btn li');
+const box={
+    btn_is:true,
+    btn_count:0,
+    btn_arr:[],
+    for_btn_li_remove:function(ME){
+        for(let i=0;i<ME.length;i++){
+            ME[i].classList.remove('active');
+        }
+    },
+    for_btn_li_arr:function(ME){
+        box.btn_arr.splice(0,ME.length);
+        for(let i=0;i<ME.length;i++){
+            box.btn_arr.push(ME[i]);
+        }
+    },
+    for_style:function(ME,get,value){
+        for(let i=get;i<ME.length;i++){
+            ME[i].style.left=value;
+        }
+    }
+
+}
+/* dom */
+for(let i=0;i<BTN_LI.length;i++){
+        BTN_LI[i].onclick=function(){
+            if(box.btn_is===true){
+                box.btn_is=false
+                box.for_btn_li_arr(BTN_LI);
+                box.btn_count = box.btn_arr.indexOf(this);
+                box.for_btn_li_remove(BTN_LI);
+                this.classList.add('active');
+                box.for_style(IMG_BOX_IMG,0,'-100%');
+                box.for_style(IMG_BOX_IMG,box.btn_count,'100%');
+                IMG_BOX_IMG[box.btn_count].style.left=0;
+            }else{
+                return;
+            }
+            setTimeout(() => {
+            box.btn_is = true;
+            }, 1000);
+        }
+    }
+</script>
+</html>
